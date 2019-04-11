@@ -83,12 +83,12 @@
 	function login(){
 		$.ajax({
 		type:"post",
-		url:"action/handle_login.jsp",
+		url:"login.login",
 		data:{
 		username:$("#username").val(),
 		password:$("#password").val()
 		},
-		success:function(result){		
+		success:function(result){
 			var ui =document.getElementById("failed");
 			ui.style.display="none";
 			var ui =document.getElementById("success");
@@ -105,7 +105,7 @@
 				var ui =document.getElementById("failed");
 				ui.style.display="";
 			}
-			else if(result == "1"){
+			else if(result == 1){
 				var ui =document.getElementById("success");
 				ui.style.display="";
 				Load("home.html");
@@ -143,8 +143,8 @@
 	}
 	function doUpdate(num)
 	{
-	document.getElementById('ShowDiv').innerHTML = '将在'+num+'秒后自动跳转到主页' ;
-	if(num == 0) { window.location = URL; }
+		document.getElementById('ShowDiv').innerHTML = '将在'+num+'秒后自动跳转到主页' ;
+		if(num == 0) { window.location = URL; }
 	}
 </script>
 </body>

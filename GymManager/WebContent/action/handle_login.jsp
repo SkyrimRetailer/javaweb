@@ -83,6 +83,8 @@
 	%>
 	
 	<%
+		String s = "12";
+		System.out.println(Integer.parseInt(s));
 		System.out.println("success");
 		System.out.println(request.getParameter("username"));
 		login(request, response);
