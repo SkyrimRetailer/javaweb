@@ -972,7 +972,7 @@ ul.activity-list > li {
   -moz-border-radius: 5px;
   border-radius: 5px;
   width: 70%;
-  height: 450px;
+  height: 500px;
   margin: 0 auto;
   background-color: #fff; }
   .auth-box:before {
@@ -1061,14 +1061,14 @@ ul.activity-list > li {
     text-align: center; }
   .auth-box.lockscreen {
     width: 50%;
-    padding: 40px 60px; }
+    padding: 50px 50px; }
     .auth-box.lockscreen .logo {
       margin-bottom: 30px; }
     .auth-box.lockscreen .user {
-      margin-bottom: 30px; }
+      margin-bottom: 0px; }
       .auth-box.lockscreen .user .name {
         font-size: 18px;
-        margin-top: 10px; }
+        margin-top: 20px; }
   @media screen and (min-width: 1440px) {
     .auth-box.lockscreen {
       width: 35%; } }
