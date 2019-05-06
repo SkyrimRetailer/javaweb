@@ -33,26 +33,30 @@
 		<div class="vertical-align-wrap">
 			<div class="vertical-align-middle">
 				<div class="auth-box lockscreen">
-						<div class="content">
-							<div class="user text-center">
-							<h2 class="name">注册账户</h2>
-							</div>
-							<div align="center">
-								<input type="text" class="form-control" data-animation="up" id="username" data-label="用户名" placeholder="username" /><span id="user_notice"></span>
-								<input type="password" class="form-control pass" data-animation="up" id="password" data-label="输入密码" placeholder="password" /><span id="pass_notice"></span>
-								<input type="password" class="form-control pass" data-animation="up" id="passwordcheck" data-label="确认密码" placeholder="password" /><span id="passcheck_notice"></span>
-								<br>
-								<span style="display:none" id="notice"></span>
-							</div>
-							
-							<div style="padding:20px 100px;" >
-								<button style="float:left" disabled=true type="submit" id="register" class="btn btn-info" onclick="register()">注册</button>
-								
-								<button style="float:right" type="submit" id="back" class="btn btn-info" onclick="back()">返回</button>
-							</div>
-							<div class="text-primary" id="ShowDiv"></div>
+					<div class="content">
+						<div class="user text-center">
+						<h2 class="name">注册账户</h2>
 						</div>
-					
+						<div align="center">
+							<input type="text" class="form-control" data-animation="up" id="username" data-label="用户名" placeholder="username" /><span id="user_notice"></span>
+						</div>
+						<div align="center">
+							<input type="password" class="form-control pass" data-animation="up" id="password" data-label="输入密码" placeholder="password" /><span id="pass_notice"></span>
+						</div>
+						<div align="center">
+							<input type="password" class="form-control pass" data-animation="up" id="passwordcheck" data-label="确认密码" placeholder="password" /><span id="passcheck_notice"></span>
+						</div>
+						<div align="center">
+							<span style="display:none" id="notice"></span>
+						</div>
+						
+						<div style="padding:20px 100px;" >
+							<button style="float:left" disabled="true" type="submit" id="register" class="btn btn-info" onclick="register()">注册</button>
+							
+							<button style="float:right" type="submit" id="back" class="btn btn-info" onclick="back()">返回</button>
+						</div>
+						<div class="text-primary" id="ShowDiv"></div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -71,14 +75,25 @@
         });
     </script>
     <script>
-	window.onload = function(){	//实现确认两次密码一致
+	window.onload = function(){	//实现确认输入正确
 		var inputs = document.getElementsByTagName("input");
 		var notice = document.getElementById("notice");
 		var register = document.getElementById("register");
 		for(i=0;i<inputs.length;i++){
 			inputs[i].onblur = function(){
+				var username = document.getElementById("username").value
 				var password = document.getElementById("password").value;
 				var passwordcheck = document.getElementById("passwordcheck").value;
+				if(username == ""){
+					notice.innerHTML = "&nbsp;&nbsp;&nbsp;用户名为空";
+					notice.className = "text-danger element-left";
+					notice.style.display="";
+					register.disabled = true;
+					return;
+				}
+				else{
+					notice.style.display="none";
+				}
 				if(password != "" && passwordcheck != ""){
 					if(password == passwordcheck){
 						notice.innerHTML = "&nbsp;&nbsp;&nbsp;两次密码一致";
