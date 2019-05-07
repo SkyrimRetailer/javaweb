@@ -11,7 +11,6 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.skyoung.mvcapp.db.JdbcUtils;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
 /**
@@ -71,6 +70,8 @@ public class DAO<T>{
 		Connection connection = null;
 		try {
 			connection = JdbcUtils.getConnection();
+			System.out.println(connection);
+			System.out.println(sql);
 			return queryRunner.query(connection, sql, new BeanListHandler<>(clazz), args);
 		} catch (Exception e) {
 			// TODO: handle exception

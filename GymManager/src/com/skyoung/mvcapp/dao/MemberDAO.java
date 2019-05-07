@@ -8,6 +8,8 @@ public interface MemberDAO {
 	
 	public List<Member> getALL();
 	
+	public void insert(Member member);
+	
 	public void save(Member member);
 	
 	public Member get(String CardID);

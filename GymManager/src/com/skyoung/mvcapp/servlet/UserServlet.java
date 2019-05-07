@@ -30,6 +30,7 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String servletPath  = request.getServletPath();					//	/delete.user
 		String methodName = servletPath.substring(1, servletPath.length() - 5);		//	delete
+		response.setHeader("Content-type", "text/html;charset=UTF-8");
 		try {
 			//利用反射获取 methodName对应的方法
 			Method method  = getClass().getDeclaredMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);

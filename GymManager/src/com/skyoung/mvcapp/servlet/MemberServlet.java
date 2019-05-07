@@ -8,14 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JInternalFrame;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-
 import com.skyoung.mvcapp.dao.impl.MemberDAOJdbcImpl;
 import com.skyoung.mvcapp.domain.Member;
-import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
-
 import net.sf.json.JSONArray;
 /**
  * Servlet implementation class MemberServlet
@@ -78,14 +72,51 @@ public class MemberServlet extends HttpServlet {
 		for(int i=0;i<ID.size();i++) {
 			memberDAOJdbcImpl.delete((String)ID.get(i));
 		}
+		response.getWriter().println(1);
+		response.getWriter().close();
 		System.out.println(ID);
+		return;
 	}
 
 	private void query(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}
+	
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		MemberDAOJdbcImpl memberDAOJdbcImpl = new MemberDAOJdbcImpl();
+		Member member = new Member();
+		member.setCardID(request.getParameter("CardID"));
+		member.setName(request.getParameter("Name"));
+		member.setGender(request.getParameter("Gender"));
+		member.setCredit(Integer.valueOf(request.getParameter("Credit")));
+		member.setTel(request.getParameter("Tel"));
+		member.setStartDate(request.getParameter("StartDate"));
+		member.setOverdueDate(request.getParameter("OverdueDate"));
+		memberDAOJdbcImpl.save(member);
+		response.getWriter().println(1);
+		response.getWriter().close();
+		return;
+	}
 
 	private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		MemberDAOJdbcImpl memberDAOJdbcImpl = new MemberDAOJdbcImpl();
+		Member member = new Member();
+		member.setCardID(request.getParameter("CardID"));
+		member.setName(request.getParameter("Name"));
+		member.setGender(request.getParameter("Gender"));
+		member.setCredit(Integer.valueOf(request.getParameter("Credit")));
+		member.setTel(request.getParameter("Tel"));
+		member.setStartDate(request.getParameter("StartDate"));
+		member.setOverdueDate(request.getParameter("OverdueDate"));
+		if(memberDAOJdbcImpl.getCountWithCardID(member.getCardID()) != 0) {
+			response.getWriter().println(0);	//ID已存在
+			response.getWriter().close();
+			return;
+		}else {
+			memberDAOJdbcImpl.insert(member);
+			response.getWriter().println(1);	//添加成功
+			response.getWriter().close();
+		}
 		
 	}
 

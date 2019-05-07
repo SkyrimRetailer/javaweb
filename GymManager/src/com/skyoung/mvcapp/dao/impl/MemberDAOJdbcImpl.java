@@ -15,7 +15,7 @@ public class MemberDAOJdbcImpl extends DAO<Member> implements MemberDAO{
 	}
 
 	@Override
-	public void save(Member member) {
+	public void insert(Member member) {
 		String sql = "INSERT INTO membercard(CardID, Name, Gender, Credit, Tel, StartDate, OverdueDate) VALUES(?, ?, ?, ?, ?, ?, ?)";
 		update(sql, member.getCardID(), member.getName(), member.getGender(), member.getCredit(), member.getTel(), member.getStartDate(), member.getOverdueDate());
 	}
@@ -36,6 +36,12 @@ public class MemberDAOJdbcImpl extends DAO<Member> implements MemberDAO{
 	public long getCountWithCardID(String CardID) {
 		String sql = "SELECT count(CardID) FROM membercard WHERE CardID = ?";
 		return getForValue(sql, CardID);
+	}
+
+	@Override
+	public void save(Member member) {
+		String sql = "UPDATE membercard SET Name=?, Gender=?, Credit=?, Tel=?, StartDate=?, OverdueDate=? WHERE CardID=?";
+		update(sql, member.getName(), member.getGender(), member.getCredit(), member.getTel(), member.getStartDate(), member.getOverdueDate(), member.getCardID());
 	}
 
 }
