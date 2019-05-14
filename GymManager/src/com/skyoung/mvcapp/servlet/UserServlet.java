@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 
 import com.skyoung.mvcapp.dao.impl.UserDAOJdbcImpl;
 import com.skyoung.mvcapp.domain.User;
@@ -44,7 +45,19 @@ public class UserServlet extends HttpServlet {
 	private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String checkcode = request.getParameter("checkcode");
+		String checkcodeval = request.getSession().getAttribute("CHECK_CODE_KEY").toString();
 		int result;
+		if(!checkcode.toLowerCase().equals(checkcodeval.toLowerCase())) {
+			result = 2;//2表示验证码错误
+			response.getWriter().print(result);
+			response.getWriter().close();
+			System.out.println(result);
+			return;
+		}
+		else {//验证码正确则清除 session 域中的 验证码 属性
+			request.getSession().removeAttribute("CHECK_CODE_KEY");
+		}
 		UserDAOJdbcImpl userDAOJdbcImpl = new UserDAOJdbcImpl();
 		if(userDAOJdbcImpl.getCountWithUsername(username) == 0) {
 			result = 0;//用户名不存在，0表示登录失败
@@ -92,5 +105,4 @@ public class UserServlet extends HttpServlet {
 			return;
 		}
 	}
-
 }
