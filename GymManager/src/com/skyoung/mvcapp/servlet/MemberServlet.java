@@ -78,10 +78,6 @@ public class MemberServlet extends HttpServlet {
 		return;
 	}
 
-	private void query(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
-	
 	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		MemberDAOJdbcImpl memberDAOJdbcImpl = new MemberDAOJdbcImpl();
 		Member member = new Member();

@@ -3,10 +3,13 @@ package com.skyoung.mvcapp.dao;
 import java.util.List;
 
 import com.skyoung.mvcapp.domain.Staff;
+import com.skyoung.mvcapp.query.StaffInitResult;
 
 public interface StaffDAO {
 	
 	public List<Staff> getALL();
+	
+	public List<StaffInitResult> getALLInit();
 	
 	public void insert(Staff staff);
 	

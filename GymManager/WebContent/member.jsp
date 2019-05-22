@@ -29,7 +29,7 @@
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a href="index.jsp"><img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+				<img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo">
 			</div>
 			<div class="container-fluid">
 				<div class="navbar-btn">
@@ -39,9 +39,9 @@
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>欢迎</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>欢迎，<%=session.getAttribute("username") %></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="index.jsp"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
+								<li><a href="logout.user"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
 							</ul>
 						</li>
 						<!-- <li>
@@ -97,6 +97,7 @@
 			<!-- END MAIN CONTENT -->
 		</div>
 		<!-- END MAIN -->
+	</div>
 		<div class="clearfix"></div>
 		<footer>
 			<div class="container-fluid">

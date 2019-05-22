@@ -17,6 +17,14 @@ public class StaffDAOJdbcImpl extends DAO<Staff> implements StaffDAO{
 		//String sql = "SELECT StaffID, Name, Gender, TypeName, Tel, BasicSalary FROM staff inner join stafftype on StaffType = TypeID ";
 		return getForList(sql);
 	}
+	
+	@Override
+	public List<StaffInitResult> getALLInit() {
+		DAO<StaffInitResult> dao = new DAO<StaffInitResult>(StaffInitResult.class);
+		String sql = "SELECT StaffID, Name, Gender, TypeName, Tel, BasicSalary FROM staff inner join stafftype on StaffType = TypeID ";
+		return dao.getForList(sql);
+	}
+
 
 	@Override
 	public void insert(Staff staff) {

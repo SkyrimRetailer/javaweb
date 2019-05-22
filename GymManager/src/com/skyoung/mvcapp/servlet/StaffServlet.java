@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.jasper.tagplugins.jstl.core.Catch;
+
 import com.skyoung.mvcapp.dao.impl.StaffDAOJdbcImpl;
 import com.skyoung.mvcapp.domain.Staff;
 import com.skyoung.mvcapp.query.StaffInitResult;
-import com.skyoung.mvcapp.query.StaffInitResultQuery;
 
 import net.sf.json.JSONArray;
 
@@ -47,16 +48,15 @@ public class StaffServlet extends HttpServlet {
 		}
 	}
 	
-	private void init(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		StaffInitResultQuery staffInitResultQuery = new StaffInitResultQuery();
-		List<StaffInitResult> list = staffInitResultQuery.getALLInit();
+	private void init(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
+		StaffDAOJdbcImpl staffDAOJdbcImpl = new StaffDAOJdbcImpl();
+		List<StaffInitResult> list = staffDAOJdbcImpl.getALLInit();
 		System.out.println(list);
 		JSONArray json = JSONArray.fromObject(list);
 		response.getWriter().println(json);
 		response.getWriter().close();
 		return;
-	}
-	
+	}	
 	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		StaffDAOJdbcImpl staffDAOJdbcImpl = new StaffDAOJdbcImpl();
 		String message = request.getParameter("string");

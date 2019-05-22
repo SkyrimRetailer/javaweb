@@ -29,7 +29,7 @@
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a href="index.jsp"><img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+				<img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo">
 			</div>
 			<div class="container-fluid">
 				<div class="navbar-btn">
@@ -39,9 +39,9 @@
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>欢迎</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>欢迎，<%=session.getAttribute("username") %></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="index.jsp"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
+								<li><a href="logout.user"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
 							</ul>
 						</li>
 						<!-- <li>
@@ -117,29 +117,9 @@
 									<button type="button" class="btn btn-primary" onclick="add_WorkoutRecord()">添加</button>
 									<br>
 									<br>
-									<div id="add_success" class="alert alert-success alert-dismissible" role="alert">
+									<div id="add_label" style="display:none">
 										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<i class="fa fa-check-circle"></i> 添加成功！
-									</div>
-									<div id="add_IDEmpty" class="alert alert-warning alert-dismissible" role="alert">
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<i class="fa fa-warning"></i> ID不能为空！
-									</div>									
-									<div id="add_RecordExist" class="alert alert-warning alert-dismissible" role="alert" >
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<i class="fa fa-times-circle"></i> 今天已经签到过了！
-									</div>
-									<div id="add_failed" class="alert alert-danger alert-dismissible" role="alert" >
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<i class="fa fa-times-circle"></i> 添加失败！
-									</div>
-									<div id="add_nofound" class="alert alert-danger alert-dismissible" role="alert" >
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<i class="fa fa-times-circle"></i> 查无此人！
-									</div>
-									<div id="add_overdue" class="alert alert-danger alert-dismissible" role="alert" >
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<i class="fa fa-times-circle"></i> 该会员卡已过期！
+										<i id="add_icon"></i> <i id="add_notice"></i>
 									</div>
 								</div>
 							</div>
@@ -151,6 +131,7 @@
 			<!-- END MAIN CONTENT -->
 		</div>
 		<!-- END MAIN -->
+	</div>
 		<div class="clearfix"></div>
 		<footer>
 			<div class="container-fluid">
@@ -166,86 +147,105 @@
 	<link href="assets/bootstrap-table-develop/dist/bootstrap-table.min.css"  rel="stylesheet">
    <script src="assets/bootstrap-table-develop/dist/bootstrap-table.js"></script>
    <script src="assets/bootstrap-table-develop/dist/locale/bootstrap-table-zh-CN.js"></script>
-   <script> $(document).ready(function(){
-		$.ajax({
-			url:"php/WorkoutRecord_info.php",
-			success:function(result){
-			$('#workoutrecord_table').bootstrapTable('load', result);
-			}
-		})
-	})
-	var ui =document.getElementById("add_success");
-	ui.style.display="none";
-	var ui =document.getElementById("add_IDEmpty");
-	ui.style.display="none";
-	var ui =document.getElementById("add_RecordExist");
-	ui.style.display="none";
-	var ui =document.getElementById("add_failed");
-	ui.style.display="none";
-	var ui =document.getElementById("add_nofound");
-	ui.style.display="none";
-	var ui =document.getElementById("add_overdue");
-	ui.style.display="none";
-	
+   <script> 
+	 $('#workoutrecord_table').bootstrapTable({
+	    url: 'init.workoutrecord',         //请求后台的URL（*）
+	    method: 'post',                      //请求方式（*）
+	    //toolbar: '#stafftype_toolbar',                //工具按钮用哪个容器
+	    striped: true,                      //是否显示行间隔色
+	    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+	    pagination: true,                   //是否显示分页（*）
+	    sortable: false,                     //是否启用排序
+	    sortOrder: "asc",                   //排序方式
+	    //queryParams: oTableInit.queryParams,//传递参数（*）
+	    sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+	    pageNumber: 1,                       //初始化加载第一页，默认第一页
+	    pageSize: 10,                       //每页的记录行数（*）
+	    pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+	    search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+	    contentType: "application/x-www-form-urlencoded",
+	    strictSearch: false,
+	    showColumns: true,                  //是否显示所有的列
+	    showRefresh: true,                  //是否显示刷新按钮
+	    minimumCountColumns: 2,             //最少允许的列数
+	    clickToSelect: true,                //是否启用点击选中行
+	    //height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+	    //uniqueId: "typeID",                     //每一行的唯一标识，一般为主键列
+	    showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
+	    cardView: false,                    //是否显示详细视图
+	    detailView: false,                   //是否显示父子表     
+	    columns: [
+	    	{checkbox: true,visible: true}, 
+	    	{field: 'checkinTime',	title: '时间',	sortable: true}, 
+	    	{field: 'cardID',		title: '卡号',	sortable: true}, 
+	    	{field: 'name',			title: '姓名',	sortable: true},
+	    	{field: 'gender',		title: '性别',	sortable: true}, 
+	    ],
+	});
 	</script>
 	<script>
-	function add_WorkoutRecord()
-	{
-		$.ajax({
-		type:"post",
-		url:"php/handle_WorkoutRecord.php",
-		data:{do_what:"add",
-		CardID:$("#CardID").val()
-		},
+	function add_WorkoutRecord(){
+		var label = document.getElementById("add_label");
+		var notice = document.getElementById("add_notice");
+		var icon = document.getElementById("add_icon");
+		label.style.display="none";
 		
-		success:function(result){
-			var ui =document.getElementById("add_success");
-			ui.style.display="none";
-			var ui =document.getElementById("add_IDEmpty");
-			ui.style.display="none";
-			var ui =document.getElementById("add_RecordExist");
-			ui.style.display="none";
-			var ui =document.getElementById("add_failed");
-			ui.style.display="none";
-			var ui =document.getElementById("add_nofound");
-			ui.style.display="none";
-			var ui =document.getElementById("add_overdue");
-			ui.style.display="none";
-			if(result == 1) {
-				var ui =document.getElementById("add_success");
-				ui.style.display="";
-			}
-			else if(result == 0){
-				var ui =document.getElementById("add_failed");
-				ui.style.display="";		
-			}
-			else if(result == 2){
-				var ui =document.getElementById("add_IDEmpty");
-				ui.style.display="";	
-			}
-			else if(result == 3){
-				var ui =document.getElementById("add_RecordExist");
-				ui.style.display="";
-			}
-			else if(result == 4){
-				var ui =document.getElementById("add_nofound");
-				ui.style.display="";
-			}
-			else if(result == 5){
-				var ui =document.getElementById("add_overdue");
-				ui.style.display="";
-			}
-			}
-		})
-		$(document).ready(function(){
-		$.ajax({
-			url:"php/WorkoutRecord_info.php",
+		if(document.getElementById("CardID").value == ""){
+			label.className = "alert alert-warning alert-dismissible";
+			label.style.display="";
+			icon.className = "fa fa-warning";
+			notice.innerHTML = "ID不能为空!";
+			return;
+		}else{
+			$.ajax({
+			type:"post",
+			url:"add.workoutrecord",
+			data:{
+			CardID:$("#CardID").val()
+			},
 			success:function(result){
-			$('#workoutrecord_table').bootstrapTable('load', result);
+				
+				if(result == 1) {
+					label.className = "alert alert-success alert-dismissible";
+					label.style.display="";
+					icon.className = "fa fa-check-circle";
+					notice.innerHTML = "打卡成功！";
+					$("#workoutrecord_table").bootstrapTable('refresh');
+					return;
+				}
+				else if(result == 0){
+					label.className = "alert alert-danger alert-dismissible";
+					label.style.display="";
+					icon.className = "fa fa-times-circle";
+					notice.innerHTML = "查无此人!";	
+					return;
+				}
+				else if(result == 2){
+					label.className = "alert alert-danger alert-dismissible";
+					label.style.display="";
+					icon.className = "fa fa-times-circle";
+					notice.innerHTML = "该会员卡已过期!";
+					return;
+				}
+				else if(result == 3){
+					label.className = "alert alert-warning alert-dismissible";
+					label.style.display="";
+					icon.className = "fa fa-warning";
+					notice.innerHTML = "今天已经打卡过了!";
+					return;
+				}else{
+					label.className = "alert alert-danger alert-dismissible";
+					label.style.display="";
+					icon.className = "fa fa-times-circle";
+					notice.innerHTML = "添加失败";	
+					return;
+				}
+				
 			}
-		})
-		})
+			})
+		}
 	}
+		
 	</script>
 </body>
 

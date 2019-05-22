@@ -11,7 +11,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.skyoung.mvcapp.db.JdbcUtils;
-
+import com.skyoung.mvcapp.query.StaffInitResult;;
 
 /**
  * 封装了基本的 CRUD 的方法。以供子类继承使用
@@ -40,6 +40,10 @@ public class DAO<T>{
 		}
 	}
 	
+	public DAO(Class cls) {
+		clazz = cls;
+	}
+
 	/**
 	 * 返回某一个字段的值，例如返回某一条记录的customerName，或返回数据表中有多少条记录等
 	 * @param sql
@@ -70,8 +74,7 @@ public class DAO<T>{
 		Connection connection = null;
 		try {
 			connection = JdbcUtils.getConnection();
-			System.out.println(connection);
-			System.out.println(sql);
+			//System.out.println(clazz);
 			return queryRunner.query(connection, sql, new BeanListHandler<>(clazz), args);
 		} catch (Exception e) {
 			// TODO: handle exception

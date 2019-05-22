@@ -67,6 +67,7 @@ public class UserServlet extends HttpServlet {
 			return;
 		}
 		if(userDAOJdbcImpl.get(username).getPassword().equals(password)) {
+			request.getSession().setAttribute("username", username);
 			result = 1;//1表示登录成功
 			response.getWriter().print("1");
 			response.getWriter().close();
@@ -80,6 +81,11 @@ public class UserServlet extends HttpServlet {
 			System.out.println(result);
 			return;
 		}
+	}
+	
+	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().removeAttribute("username");
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
 	
 	private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -97,7 +103,7 @@ public class UserServlet extends HttpServlet {
 			System.out.println(result);
 			return;
 		}else {
-			userDAOJdbcImpl.save(user);
+			userDAOJdbcImpl.insert(user);
 			result = 1;//1表示注册成功
 			response.getWriter().print(result);
 			response.getWriter().close();
