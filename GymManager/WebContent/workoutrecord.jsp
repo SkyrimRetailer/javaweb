@@ -79,24 +79,12 @@
 							<!-- TABLE STRIPED -->
 							
 								<div class="panel-body">
-									<table id="workoutrecord_table" class="table table-striped"
-										data-toggle="table" 
-										data-pagination="true"
-										data-pagination-loop="true"
-										data-only-info-pagination="false"
-										data-side-pagination="client"
-										data-smart-display="true"
-										data-search="true">										
-										<thead>
-										 <tr>
-											<th data-field="CheckinDate">时间</th>
-											<th data-field="CardID">会员卡号</th>
-											<th data-field="Name">姓名</th>
-											<th data-field="Gender">性别</th>
-										 </tr>
-										</thead>
-									</table>
-							
+									<div id="toolbar">
+							            <button id="btn_delete" type="button" class="btn btn-default" onclick="delete_WorkoutRecord()">
+							                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+							            </button>
+									</div>
+									<table id="workoutrecord_table" class="table table-striped"></table>
 								</div>							
 							<!-- END TABLE STRIPED -->
 							</div>
@@ -151,7 +139,7 @@
 	 $('#workoutrecord_table').bootstrapTable({
 	    url: 'init.workoutrecord',         //请求后台的URL（*）
 	    method: 'post',                      //请求方式（*）
-	    //toolbar: '#stafftype_toolbar',                //工具按钮用哪个容器
+	    toolbar: '#toolbar',                //工具按钮用哪个容器
 	    striped: true,                      //是否显示行间隔色
 	    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	    pagination: true,                   //是否显示分页（*）
@@ -243,6 +231,47 @@
 				
 			}
 			})
+		}
+	}
+	function delete_WorkoutRecord(){
+		var rows=$("#workoutrecord_table").bootstrapTable("getSelections");//得到选中的列              
+		if(rows.length>0){
+			var message="";
+			var ID=[];
+			var Time=[];
+		    for(var i=0;i<rows.length;i++){
+				if(i==0){
+					
+					message=rows[i].checkinTime + "\t" + rows[i].cardID + "\t" + rows[i].name;
+					ID.push(rows[i].cardID);
+					Time.push(rows[i].checkinTime);
+				}else{
+					message=message + "\n" + rows[i].checkinTime + "\t" + rows[i].cardID + "\t" + rows[i].name;
+					ID.push(rows[i].cardID);
+					Time.push(rows[i].checkinTime);
+				}
+		    }
+			if(confirm("是否删除 "+rows.length+" 条数据：\n\n"+message+"\n\n该操作不可恢复！")){
+				//开始删除数据
+				$.ajax({
+					type:"post",
+					url:"delete.workoutrecord",
+					data:{TimeString:JSON.stringify(Time),
+						IDString:JSON.stringify(ID)},
+					success:function(result){
+						if(result == 1){
+							$("#workoutrecord_table").bootstrapTable('refresh');
+						}
+						else{
+							alert("删除失败");
+						}
+					}
+				})
+			}else{
+				
+			}
+		}else{
+			alert("请选择要删除的列");
 		}
 	}
 		

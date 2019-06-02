@@ -68,19 +68,22 @@ public class WorkoutRecordServlet extends HttpServlet {
 	private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		WorkoutRecordDAOJdbcImpl workoutRecordDAOJdbcImpl = new WorkoutRecordDAOJdbcImpl();
 		MemberDAOJdbcImpl memberDAOJdbcImpl = new MemberDAOJdbcImpl();
-		System.out.println("testing1");
 		WorkoutRecord workoutRecord = new WorkoutRecord();
 		workoutRecord.setCardID(request.getParameter("CardID"));
-		Timestamp checkinTime = new Timestamp(System.currentTimeMillis()); 
-		workoutRecord.setCheckinTime(checkinTime.toString().substring(0, 19));
-		Timestamp overduedate = Timestamp.valueOf(memberDAOJdbcImpl.get(workoutRecord.getCardID()).getOverdueDate());
-		System.out.println("testing2");
+		System.out.println(workoutRecord.getCardID());
+		
 		if(memberDAOJdbcImpl.getCountWithCardID(workoutRecord.getCardID()) == 0) {
 			response.getWriter().println(0);	//ID不存在
 			response.getWriter().close();
 			System.out.println(0);
 			return;
 		}
+		
+		Member member = memberDAOJdbcImpl.get(request.getParameter("CardID"));
+		Timestamp checkinTime = new Timestamp(System.currentTimeMillis()); 
+		Timestamp overduedate = Timestamp.valueOf(member.getOverdueDate());
+		workoutRecord.setCheckinTime(checkinTime.toString().substring(0, 19));
+		
 		if(overduedate.before(checkinTime)) {
 			response.getWriter().println(2);	//会员卡过期了
 			response.getWriter().close();
@@ -90,6 +93,10 @@ public class WorkoutRecordServlet extends HttpServlet {
 		List<WorkoutRecord> list = workoutRecordDAOJdbcImpl.getByCardID(workoutRecord.getCardID());
 		if(list.isEmpty()) {
 			workoutRecordDAOJdbcImpl.insert(workoutRecord);
+			//每次打卡添加积分
+			member.setCredit(member.getCredit() + Integer.valueOf(this.getServletContext().getInitParameter("checkinCredits")));
+			System.out.println(member);
+			memberDAOJdbcImpl.save(member);
 			response.getWriter().println(1);	//打卡成功
 			response.getWriter().close();
 			System.out.println(1);
@@ -98,7 +105,6 @@ public class WorkoutRecordServlet extends HttpServlet {
 		Timestamp lastcheckinTime = Timestamp.valueOf(list.get(0).getCheckinTime());
 		Date date1 = new Date(checkinTime.getTime());
 		Date date2 = new Date(lastcheckinTime.getTime());
-		System.out.println("testing3");
 		if(DateUtils.isSameDay(date1,date2)) {
 			response.getWriter().println(3);	//今天已经打卡过了
 			response.getWriter().close();
@@ -106,6 +112,10 @@ public class WorkoutRecordServlet extends HttpServlet {
 			return;
 		}else {
 			workoutRecordDAOJdbcImpl.insert(workoutRecord);
+			//每次打卡添加积分
+			member.setCredit(member.getCredit() + Integer.valueOf(this.getServletContext().getInitParameter("checkinCredits")));
+			System.out.println(member);
+			memberDAOJdbcImpl.save(member);
 			response.getWriter().println(1);	//打卡成功
 			response.getWriter().close();
 			System.out.println(1);
@@ -115,6 +125,17 @@ public class WorkoutRecordServlet extends HttpServlet {
 	}
 	
 	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		WorkoutRecordDAOJdbcImpl workoutRecordDAOJdbcImpl = new WorkoutRecordDAOJdbcImpl();
+		String IDString = request.getParameter("IDString");
+		String TimeString = request.getParameter("TimeString");
+		JSONArray ID = JSONArray.fromObject(IDString);
+		JSONArray Time = JSONArray.fromObject(TimeString);
+		for(int i=0;i<ID.size();i++) {
+			workoutRecordDAOJdbcImpl.delete((String)Time.get(i), (String)ID.get(i));
+		}
+		response.getWriter().println(1);
+		response.getWriter().close();
+		System.out.println(ID);
+		return;
 	}
 }

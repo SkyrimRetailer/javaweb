@@ -208,7 +208,7 @@
 		n=n+(day-1);
 		}
 		else{
-		n=n+day;
+		n=n+day+6;
 		}
 		if(day){
 		//这个判断是为了解决跨年的问题
@@ -233,93 +233,41 @@
 	var weekend=getTime(-6);	//本周结束日期
 	var lastweekstart=getTime(7);	//上周开始时间
 	var lastweekend=getTime(1);		//上周结束时间
+	
+	var time = new Date();
+	var year=time.getFullYear();
+	var month=time.getMonth()+1;
 	$("#Period").text("	周期："+weekstart+" - "+weekend);
 	</script>
 	<script>
 	function home_init(){
 		$.ajax({
 			type:"post",
-			url:"php/home_init.php",
+			url:"init.home",
 			data:{do_what:"Workout",
-			startdate:weekstart,
-			enddate:weekend
+			WeekStart:weekstart,
+			WeekEnd:weekend,
+			MonthStart:year+"-"+(month<10?('0'+month):month)+"-"+"01",
+			LastWeekStart:lastweekstart
 			},
 			success:function(result){
-			$("#Workout").text(result);
-			}
-		})
-		
-		$.ajax({
-			type:"post",
-			url:"php/home_init.php",
-			data:{do_what:"Sales",
-			startdate:weekstart,
-			enddate:weekend
-			},
-			success:function(result){
-			$("#Sales").text(result);
-			}
-		})
-		$.ajax({
-			type:"post",
-			url:"php/home_init.php",
-			data:{do_what:"TotalWorkout"
-			},
-			success:function(result){
-			$("#TotalWorkout").text(result);
-			}
-		})
-		$.ajax({
-			type:"post",
-			url:"php/home_init.php",
-			data:{do_what:"TotalSales"
-			},
-			success:function(result){
-			$("#TotalSales").text(result);
-			}
-		})
-		var time = new Date();
-		var year=time.getFullYear();
-		var month=time.getMonth()+1;
-		$.ajax({
-			type:"post",
-			url:"php/home_init.php",
-			data:{do_what:"MonthlyIncome",
-			startdate:year+"-"+(month<10?('0'+month):month)+"-"+"01"
-			},
-			success:function(result){
-			$("#MonthlyIncome").text("￥"+result);
-			}
-		})
-		
-		$.ajax({
-			type:"post",
-			url:"php/home_init.php",
-			data:{do_what:"TotalIncome"
-			},
-			success:function(result){
-			$("#TotalIncome").text("￥"+result);
-			}
-		})
-		$.ajax({
-			type:"post",
-			url:"php/home_init.php",
-			data:{do_what:"WorkoutRecord",
-			startdate:weekstart,
-			laststartdate:lastweekstart
-			},
-			success:function(result){
-				result=eval(result);	//把返回的字符串变为数组
+				var obj = eval("("+ result +")");
+				$("#Workout").text(obj.weekworkout);
+				$("#Sales").text(obj.weeksale);
+				$("#TotalWorkout").text(obj.totalworkout);
+				$("#TotalSales").text(obj.totalsale);
+				$("#MonthlyIncome").text("￥"+obj.monthlyincome);
+				$("#TotalIncome").text("￥"+obj.totalincome);
 				data = {
-				labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-				series: result
+					labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+					series: obj.workoutrecord
 				};
 				options = {
-				height: 300,
-				showArea: true,
-				showLine: false,
-				showPoint: false,
-				fullWidth: true,
+					height: 300,
+					showArea: true,
+					showLine: false,
+					showPoint: false,
+					fullWidth: true,
 				axisX: {
 					showGrid: false
 				},

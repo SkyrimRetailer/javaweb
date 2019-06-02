@@ -322,7 +322,7 @@
 						label.className = "alert alert-danger alert-dismissible";
 						label.style.display="";
 						icon.className = "fa fa-times-circle";
-						notice.innerHTML = "修改失败!";
+						notice.innerHTML = "添加失败!";
 					}
 				}
 			})

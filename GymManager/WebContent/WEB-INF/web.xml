@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
-<!-- 未登录时重定向的页面 -->
   <context-param>
     <param-name>rediretPage</param-name>
     <param-value>/index.jsp</param-value>
   </context-param>
-<!-- 无需过滤的url -->
   <context-param>
     <param-name>uncheckedUrls</param-name>
     <param-value>/register.jsp,/error.jsp,/index.jsp</param-value>
   </context-param>
-  
+  <context-param>
+    <param-name>checkinCredits</param-name>
+    <param-value>10</param-value>
+  </context-param>
   <servlet>
     <servlet-name>CheckCodeServlet</servlet-name>
     <servlet-class>com.skyoung.mvcapp.checkcode.CheckCodeServlet</servlet-class>
@@ -19,7 +20,6 @@
     <servlet-name>CheckCodeServlet</servlet-name>
     <url-pattern>/CheckCodeServlet</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>UserServlet</servlet-name>
     <servlet-class>com.skyoung.mvcapp.servlet.UserServlet</servlet-class>
@@ -28,7 +28,14 @@
     <servlet-name>UserServlet</servlet-name>
     <url-pattern>*.user</url-pattern>
   </servlet-mapping>
-  
+  <servlet>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>com.skyoung.mvcapp.servlet.HomeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>*.home</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>MemberServlet</servlet-name>
     <servlet-class>com.skyoung.mvcapp.servlet.MemberServlet</servlet-class>
@@ -37,7 +44,6 @@
     <servlet-name>MemberServlet</servlet-name>
     <url-pattern>*.member</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>StafftypeServlet</servlet-name>
     <servlet-class>com.skyoung.mvcapp.servlet.StafftypeServlet</servlet-class>
@@ -46,7 +52,6 @@
     <servlet-name>StafftypeServlet</servlet-name>
     <url-pattern>*.stafftype</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>StaffServlet</servlet-name>
     <servlet-class>com.skyoung.mvcapp.servlet.StaffServlet</servlet-class>
@@ -55,7 +60,6 @@
     <servlet-name>StaffServlet</servlet-name>
     <url-pattern>*.staff</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>WorkoutRecordServlet</servlet-name>
     <servlet-class>com.skyoung.mvcapp.servlet.WorkoutRecordServlet</servlet-class>
@@ -64,7 +68,14 @@
     <servlet-name>WorkoutRecordServlet</servlet-name>
     <url-pattern>*.workoutrecord</url-pattern>
   </servlet-mapping>
-  
+  <servlet>
+    <servlet-name>FinacialRecordServlet</servlet-name>
+    <servlet-class>com.skyoung.mvcapp.servlet.FinacialRecordServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FinacialRecordServlet</servlet-name>
+    <url-pattern>*.finacialrecord</url-pattern>
+  </servlet-mapping>
   <filter>
     <filter-name>LoginFilter</filter-name>
     <filter-class>com.skyoung.mvcapp.filter.LoginFilter</filter-class>
