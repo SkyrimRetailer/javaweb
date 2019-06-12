@@ -76,6 +76,14 @@
     <servlet-name>FinacialRecordServlet</servlet-name>
     <url-pattern>*.finacialrecord</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>AuthorityServlet</servlet-name>
+  	<servlet-class>com.skyoung.mvcapp.servlet.AuthorityServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>AuthorityServlet</servlet-name>
+  	<url-pattern>*.authority</url-pattern>
+  </servlet-mapping>
   <filter>
     <filter-name>LoginFilter</filter-name>
     <filter-class>com.skyoung.mvcapp.filter.LoginFilter</filter-class>
@@ -83,6 +91,16 @@
   <filter-mapping>
     <filter-name>LoginFilter</filter-name>
     <url-pattern>*.jsp</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  <filter>
+  	<filter-name>AuthorityFilter</filter-name>
+    <filter-class>com.skyoung.mvcapp.filter.AuthorityFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthorityFilter</filter-name>
+    <url-pattern>*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>

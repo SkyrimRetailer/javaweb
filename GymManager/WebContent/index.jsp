@@ -47,7 +47,7 @@
 							</div>	
 							<div class="form-group input-group">
 								<label class="control-label sr-only">验证码</label>
-								<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+								<span class="input-group-addon"><i class="fa fa-check-circle"></i></span>
 								<input style="width:50%" type="text" maxlength="16" id="checkcode" class="form-control" placeholder="CheckCode">
 								<img align="right" id="img" alt="" src="<%= request.getContextPath() %>/CheckCodeServlet" onclick="ChangeImg()">
 							</div>
@@ -162,10 +162,18 @@
 					notice.style.display="";
 					Load("home.jsp");
 				}
-				
+				else{
+					label.innerHTML = "ERROR";
+					label.className = "label label-danger";
+					label.style.display="";
+					notice.innerHTML = "&nbsp;&nbsp;&nbsp;登录失败";
+					notice.className = "text-danger element-left";
+					notice.style.display="";
+					login.disabled = false;
+					spin.style.display = "none";
+				}
 			}
 			})
-			
 		}
 	}
 	</script>

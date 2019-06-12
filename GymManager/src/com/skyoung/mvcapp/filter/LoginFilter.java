@@ -21,7 +21,7 @@ public class LoginFilter extends HttpFilter{
 	protected void init() {
 		ServletContext servletContext = getFilterConfig().getServletContext();
 		redirectUrl = servletContext.getInitParameter("rediretPage");
-		///login/a.jsp,/login/list.jsp,/login/login.jsp,/login/doLogin.jsp
+		///register.jsp,/error.jsp,/index.jsp
 		unchekcedUrls = servletContext.getInitParameter("uncheckedUrls");
 	}
 	

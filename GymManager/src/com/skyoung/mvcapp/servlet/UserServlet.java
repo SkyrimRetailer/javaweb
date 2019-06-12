@@ -10,8 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.Session;
 
+import com.skyoung.mvcapp.dao.impl.RoleAuthorityDAOJdbcImpl;
+import com.skyoung.mvcapp.dao.impl.UserAuthorityDAOJdbcImpl;
 import com.skyoung.mvcapp.dao.impl.UserDAOJdbcImpl;
+import com.skyoung.mvcapp.domain.RoleAuthority;
 import com.skyoung.mvcapp.domain.User;
+import com.skyoung.mvcapp.domain.UserAuthority;
 
 /**
  * Servlet implementation class LoginServlet
@@ -55,9 +59,9 @@ public class UserServlet extends HttpServlet {
 			System.out.println(result);
 			return;
 		}
-		else {//验证码正确则清除 session 域中的 验证码 属性
+		/*else {//验证码正确则清除 session 域中的 验证码 属性
 			request.getSession().removeAttribute("CHECK_CODE_KEY");
-		}
+		}*/	//此处会引起bug，若第一次验证码正确而用户名密码不正确，则在第二次登录的时候，无验证码可验证！
 		UserDAOJdbcImpl userDAOJdbcImpl = new UserDAOJdbcImpl();
 		if(userDAOJdbcImpl.getCountWithUsername(username) == 0) {
 			result = 0;//用户名不存在，0表示登录失败
@@ -89,13 +93,19 @@ public class UserServlet extends HttpServlet {
 	}
 	
 	private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserAuthorityDAOJdbcImpl userAuthorityDAOJdbcImpl = new UserAuthorityDAOJdbcImpl();
+		RoleAuthorityDAOJdbcImpl roleAuthorityDAOJdbcImpl = new RoleAuthorityDAOJdbcImpl();
+		UserDAOJdbcImpl userDAOJdbcImpl = new UserDAOJdbcImpl();
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String role = request.getParameter("role");
+		
 		int result;
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
-		UserDAOJdbcImpl userDAOJdbcImpl = new UserDAOJdbcImpl();
+		
+		
 		if(userDAOJdbcImpl.getCountWithUsername(username) != 0) {
 			result = 0;//用户名已存在，0表示注册失败
 			response.getWriter().print(result);
@@ -104,6 +114,37 @@ public class UserServlet extends HttpServlet {
 			return;
 		}else {
 			userDAOJdbcImpl.insert(user);
+			RoleAuthority roleAuthority = roleAuthorityDAOJdbcImpl.get(role);
+			UserAuthority userAuthority = new UserAuthority();
+			
+			userAuthority.setUsername(username);
+			userAuthority.setAuthorityManage(roleAuthority.getAuthorityManage());
+			
+			userAuthority.setStaffRead(roleAuthority.getStaffRead());
+			userAuthority.setStaffAdd(roleAuthority.getStaffAdd());
+			userAuthority.setStaffEdit(roleAuthority.getStaffEdit());
+			userAuthority.setStaffDelete(roleAuthority.getStaffDelete());
+			
+			userAuthority.setStaffTypeRead(roleAuthority.getStaffTypeRead());
+			userAuthority.setStaffTypeAdd(roleAuthority.getStaffTypeAdd());
+			userAuthority.setStaffTypeEdit(roleAuthority.getStaffTypeEdit());
+			userAuthority.setStaffTypeDelete(roleAuthority.getStaffTypeDelete());
+			
+			userAuthority.setMemberRead(roleAuthority.getMemberRead());
+			userAuthority.setMemberAdd(roleAuthority.getMemberAdd());
+			userAuthority.setMemberEdit(roleAuthority.getMemberEdit());
+			userAuthority.setMemberDelete(roleAuthority.getMemberDelete());
+			
+			userAuthority.setWorkoutRecordRead(roleAuthority.getWorkoutRecordRead());
+			userAuthority.setWorkoutRecordAdd(roleAuthority.getWorkoutRecordAdd());
+			userAuthority.setWorkoutRecordDelete(roleAuthority.getWorkoutRecordDelete());
+			
+			userAuthority.setFinacialRecordRead(roleAuthority.getFinacialRecordRead());
+			userAuthority.setFinacialRecordAdd(roleAuthority.getFinacialRecordAdd());
+			userAuthority.setFinacialRecordEdit(roleAuthority.getFinacialRecordEdit());
+			userAuthority.setFinacialRecordDelete(roleAuthority.getFinacialRecordDelete());
+			
+			userAuthorityDAOJdbcImpl.insert(userAuthority);
 			result = 1;//1表示注册成功
 			response.getWriter().print(result);
 			response.getWriter().close();

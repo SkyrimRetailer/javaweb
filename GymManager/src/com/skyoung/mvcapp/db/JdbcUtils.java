@@ -31,7 +31,7 @@ public class JdbcUtils {
 	
 	static {
 		//数据源只能被创建一次。
-		dataSource = new ComboPooledDataSource("mvcapp");
+		dataSource = new ComboPooledDataSource("MyDB");
 	}
 	
 	/**

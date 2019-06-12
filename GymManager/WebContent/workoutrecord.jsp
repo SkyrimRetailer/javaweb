@@ -39,7 +39,7 @@
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>欢迎，<%=session.getAttribute("username") %></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>欢迎，${sessionScope.username}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="logout.user"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
 							</ul>
@@ -62,6 +62,7 @@
 						<li><a href="member.jsp" class=""><i class="lnr lnr-chart-bars"></i> <span>会员信息</span></a></li>
 						<li><a href="workoutrecord.jsp" class="active"><i class="lnr lnr-alarm"></i> <span>健身记录</span></a></li>
 						<li><a href="finacialrecord.jsp" class=""><i class="lnr lnr-file-empty"></i> <span>财务信息</span></a></li>						
+						<li><a href="authority.jsp" class=""><i class="lnr lnr-magic-wand"></i> <span>权限管理</span></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -221,7 +222,10 @@
 					icon.className = "fa fa-warning";
 					notice.innerHTML = "今天已经打卡过了!";
 					return;
-				}else{
+				}else if(result == "no-permission"){
+					alert("抱歉！您没有添加数据权限。")
+				}
+				else{
 					label.className = "alert alert-danger alert-dismissible";
 					label.style.display="";
 					icon.className = "fa fa-times-circle";
@@ -261,6 +265,8 @@
 					success:function(result){
 						if(result == 1){
 							$("#workoutrecord_table").bootstrapTable('refresh');
+						}else if(result == "no-permission"){
+							alert("抱歉！您没有删除数据权限。")
 						}
 						else{
 							alert("删除失败");

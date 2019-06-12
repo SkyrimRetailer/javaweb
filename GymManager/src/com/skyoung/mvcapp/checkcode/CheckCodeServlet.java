@@ -37,7 +37,7 @@ public class CheckCodeServlet extends HttpServlet {
 	
 	//初始化验证码图形属性
 	public void init(){
-		fontHeight = height - 2;
+		fontHeight = height - 6;
 		codeX = width / (codeCount + 2);
 		codeY = height - 4;
 	}

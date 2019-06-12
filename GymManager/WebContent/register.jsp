@@ -39,15 +39,28 @@
 						<div class="user text-center">
 						<h2 class="name">注册账户</h2>
 						</div>
-						<div align="center">
-							<input type="text" class="form-control" data-animation="up" id="username" data-label="用户名" placeholder="username" /><span id="user_notice"></span>
+						<div class="form-group input-group">
+							<label for="signin-email" class="control-label sr-only">用户名</label>
+							<span class="input-group-addon"><i class="fa fa-user"></i></span>
+							<input type="text" maxlength="16" id="username" class="form-control" placeholder="用户名">
 						</div>
-						<div align="center">
-							<input type="password" class="form-control pass" data-animation="up" id="password" data-label="输入密码" placeholder="password" /><span id="pass_notice"></span>
-						</div>
-						<div align="center">
-							<input type="password" class="form-control pass" data-animation="up" id="passwordcheck" data-label="确认密码" placeholder="password" /><span id="passcheck_notice"></span>
-						</div>
+						<div class="form-group input-group">
+							<label for="signin-password" class="control-label sr-only">密码</label>
+							<span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+							<input type="password" maxlength="16" id="password" class="form-control" placeholder="密码">
+						</div>	
+						<div class="form-group input-group">
+							<label for="signin-password" class="control-label sr-only">密码</label>
+							<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+							<input type="password" maxlength="16" id="passwordcheck" class="form-control" placeholder="确认密码">
+						</div>	
+						<div class="form-group input-group">
+							<label for="signin-password" class="control-label sr-only">密码</label>
+							<span class="input-group-addon"><i class="fa fa-id-badge"></i></span>
+							<select id="role" class="form-control">
+								<option value="">------请选择角色------</option>
+							</select>
+						</div>	
 						<div align="center">
 							<span style="display:none" id="notice"></span>
 						</div>
@@ -55,10 +68,10 @@
 						<div style="padding:20px 100px;" >
 							<button style="float:left" disabled="true" type="submit" id="register" class="btn btn-info" onclick="register()">注册</button>
 							
-							<button style="float:right" type="submit" id="back" class="btn btn-info" onclick="back()">返回</button>
+							<button style="	float:right" type="submit" id="back" class="btn btn-info" onclick="back()">返回</button>
 						</div>
-						<div class="text-primary" id="ShowDiv"></div>
 					</div>
+					<div class="text-primary" align="center" id="ShowDiv"></div>
 				</div>
 			</div>
 		</div>
@@ -71,11 +84,28 @@
 	<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
-	<script type="text/javascript">
-        $(document).ready(function () {
-            $('input').ftext();
-        });
-    </script>
+	<script>
+	function init(){
+		$.ajax({
+			type:"post",
+			url:"init.authority",
+			data:{
+				init:"init"
+			},
+			success:function(result){
+				var select = document.getElementById("role");
+				var obj = eval("("+ result +")");
+				roles = obj.roles;
+				select.options.length=0;
+				select.options.add(new Option("------请选择角色------",""));
+				for(var i=0;i<roles.length;i++){
+					select.options.add(new Option(roles[i].rolename,roles[i].rolename));
+				}
+			}
+		})
+	}
+	init();
+	</script>
     <script>
 	window.onload = function(){	//实现确认输入正确
 		var inputs = document.getElementsByTagName("input");
@@ -92,8 +122,7 @@
 					notice.style.display="";
 					register.disabled = true;
 					return;
-				}
-				else{
+				}else{
 					notice.style.display="none";
 				}
 				if(password != "" && passwordcheck != ""){
@@ -120,15 +149,24 @@
 	<script type="text/javascript">
 	function register(){
 		var notice = document.getElementById("notice");
+		var role = document.getElementById("role");
+		alert(role.value)
+		if(role.value == ""){
+			notice.innerHTML = "&nbsp;&nbsp;&nbsp;请选择注册角色";
+			notice.className = "text-danger element-left";
+			notice.style.display="";
+			return;
+		}
 		$.ajax({
 		type:"post",
 		url:"register.user",
 		data:{
 		username:$("#username").val(),
-		password:$("#password").val()
+		password:$("#password").val(),
+		role:role.value
 		},
 		success:function(result){
-			if(result  == 0){
+			if(result == 0){
 				notice.innerHTML = "&nbsp;&nbsp;&nbsp;用户名已注册";
 				notice.className = "text-danger element-left";
 				notice.style.display="";

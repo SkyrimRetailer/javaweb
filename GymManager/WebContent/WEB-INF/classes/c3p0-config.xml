@@ -2,7 +2,7 @@
 
 <c3p0-config>
   
-  <named-config name="mvcapp"> 
+  <named-config name="MyDB"> 
     
     <property name="user">root</property>
     <property name="password">caitianyanghao</property>

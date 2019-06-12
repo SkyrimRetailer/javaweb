@@ -72,6 +72,7 @@ public class DAO<T>{
 	 */
 	public List<T> getForList(String sql, Object ... args){
 		Connection connection = null;
+		System.out.println(clazz);
 		try {
 			connection = JdbcUtils.getConnection();
 			//System.out.println(clazz);
