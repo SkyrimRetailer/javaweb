@@ -150,7 +150,6 @@
 	function register(){
 		var notice = document.getElementById("notice");
 		var role = document.getElementById("role");
-		alert(role.value)
 		if(role.value == ""){
 			notice.innerHTML = "&nbsp;&nbsp;&nbsp;请选择注册角色";
 			notice.className = "text-danger element-left";

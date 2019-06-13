@@ -325,7 +325,7 @@
 								<div class="panel-body">
 									<span>角色名称：</span>
 									<br>
-									<input type="text" Maxlength="8" id="Rolename" required="required" class="form-control" >
+									<input type="text" id="Rolename" required="required" class="form-control" >
 									<br>
 									<button type="button" class="btn btn-primary" onclick="add_Role()">添加</button>
 									<button type="button" class="btn btn-primary" onclick="delete_Role()">删除</button>
