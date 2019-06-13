@@ -121,7 +121,34 @@ public class AuthorityServlet extends HttpServlet {
 		roleAuthorityDAOJdbcImpl.save(roleAuthority);
 		response.getWriter().println(1);
 		response.getWriter().close();
-		
 	}
-
+	private void add_role(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RoleAuthorityDAOJdbcImpl roleAuthorityDAOJdbcImpl = new RoleAuthorityDAOJdbcImpl();
+		String rolename = request.getParameter("Rolename");
+		if(roleAuthorityDAOJdbcImpl.getCountWithRolename(rolename) != 0) {
+			response.getWriter().println(0);//角色已存在！
+			response.getWriter().close();
+			return;
+		}
+		RoleAuthority roleAuthority = new RoleAuthority();
+		roleAuthority.setRolename(rolename);
+		roleAuthorityDAOJdbcImpl.insert(roleAuthority);
+		response.getWriter().println(1);//添加成功！
+		response.getWriter().close();
+		return;
+	}
+	private void delete_role(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RoleAuthorityDAOJdbcImpl roleAuthorityDAOJdbcImpl = new RoleAuthorityDAOJdbcImpl();
+		String rolename = request.getParameter("Rolename");
+		if(roleAuthorityDAOJdbcImpl.getCountWithRolename(rolename) == 0) {
+			response.getWriter().println(0);//角色不存在！
+			response.getWriter().close();
+			return;
+		}
+		RoleAuthority roleAuthority = new RoleAuthority();
+		roleAuthorityDAOJdbcImpl.delete(rolename);
+		response.getWriter().println(1);//删除成功！
+		response.getWriter().close();
+		return;
+	}
 }

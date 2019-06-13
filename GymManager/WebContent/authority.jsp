@@ -83,8 +83,10 @@
 					<div class="col">
 						<div class="col-md-6">
 							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">用户权限管理</h3>
+								</div>
 								<div class="panel-body">
-									<h4>用户权限管理：</h4>
 									<select id="all_users" class="form-control">
 										<option value="">------请选择用户------</option>
 									</select>
@@ -198,8 +200,10 @@
 					<div class="col">
 						<div class="col-md-6">
 							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">角色权限管理</h3>
+								</div>
 								<div class="panel-body">
-									<h4>角色权限管理：</h4>
 									<select id="all_roles" class="form-control">
 										<option value="">------请选择角色------</option>
 									</select>
@@ -310,6 +314,31 @@
 						</div>
 					</div>
 					<!-- END ROLE AUTHORITY -->
+					
+					<!-- START ADD AND DELETE ROLE -->
+					<div class="col">
+						<div class="col-md-6">
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">添加/删除角色</h3>
+								</div>
+								<div class="panel-body">
+									<span>角色名称：</span>
+									<br>
+									<input type="text" Maxlength="8" id="Rolename" required="required" class="form-control" >
+									<br>
+									<button type="button" class="btn btn-primary" onclick="add_Role()">添加</button>
+									<button type="button" class="btn btn-primary" onclick="delete_Role()">删除</button>
+									<br>
+									<br>
+									<div id="label" style="display:none">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<i id="icon"></i> <i id="notice"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
 				</div>
 			</div>
 			<!-- END MAIN CONTENT -->
@@ -614,6 +643,105 @@
 			}
 		})
 	}
+	</script>
+	<script>
+	function add_Role(){
+		var label = document.getElementById("label");
+		var notice = document.getElementById("notice");
+		var icon = document.getElementById("icon");
+		label.style.display="none";
+		if(document.getElementById("Rolename").value == ""){
+			label.className = "alert alert-warning alert-dismissible";
+			label.style.display="";
+			icon.className = "fa fa-warning";
+			notice.innerHTML = "角色名称不能为空!";
+			return;
+		}
+		else{
+			$.ajax({
+				type:"post",
+				url:"add_role.authority",
+				data:{
+				Rolename:$("#Rolename").val()
+				},
+				success:function(result){
+					
+					if(result == 1) {
+						label.className = "alert alert-success alert-dismissible";
+						label.style.display="";
+						icon.className = "fa fa-check-circle";
+						notice.innerHTML = "添加成功！请在上方设置角色权限";
+						init();
+						return;
+					}
+					else if(result == 0){
+						label.className = "alert alert-danger alert-dismissible";
+						label.style.display="";
+						icon.className = "fa fa-times-circle";
+						notice.innerHTML = "该角色已存在!";	
+						return;
+					}
+					else{
+						label.className = "alert alert-danger alert-dismissible";
+						label.style.display="";
+						icon.className = "fa fa-times-circle";
+						notice.innerHTML = "添加失败";	
+						return;
+					}
+					
+				}
+				})
+		}
+	}
+	
+	function delete_Role(){
+		var label = document.getElementById("label");
+		var notice = document.getElementById("notice");
+		var icon = document.getElementById("icon");
+		label.style.display="none";
+		if(document.getElementById("Rolename").value == ""){
+			label.className = "alert alert-warning alert-dismissible";
+			label.style.display="";
+			icon.className = "fa fa-warning";
+			notice.innerHTML = "角色名称不能为空!";
+			return;
+		}
+		else{
+			$.ajax({
+				type:"post",
+				url:"delete_role.authority",
+				data:{
+				Rolename:$("#Rolename").val()
+				},
+				success:function(result){
+					
+					if(result == 1) {
+						label.className = "alert alert-success alert-dismissible";
+						label.style.display="";
+						icon.className = "fa fa-check-circle";
+						notice.innerHTML = "删除成功";
+						init();
+						return;
+					}
+					else if(result == 0){
+						label.className = "alert alert-danger alert-dismissible";
+						label.style.display="";
+						icon.className = "fa fa-times-circle";
+						notice.innerHTML = "该角色不存在!";	
+						return;
+					}
+					else{
+						label.className = "alert alert-danger alert-dismissible";
+						label.style.display="";
+						icon.className = "fa fa-times-circle";
+						notice.innerHTML = "删除失败";	
+						return;
+					}
+				}
+				})
+		}
+	}
+	
 	</script>
 </body>
 

@@ -38,4 +38,16 @@ public class RoleAuthorityDAOJdbcImpl extends DAO<RoleAuthority> implements Role
 		update(sql, roleAuthority.getAuthorityManage(), roleAuthority.getStaffRead(), roleAuthority.getStaffAdd(), roleAuthority.getStaffEdit(), roleAuthority.getStaffDelete(), roleAuthority.getStaffTypeRead(), roleAuthority.getStaffTypeAdd(), roleAuthority.getStaffTypeEdit(), roleAuthority.getStaffTypeDelete(), roleAuthority.getMemberRead(), roleAuthority.getMemberAdd(), roleAuthority.getMemberEdit(), roleAuthority.getMemberDelete(), roleAuthority.getWorkoutRecordRead(), roleAuthority.getWorkoutRecordAdd(), roleAuthority.getWorkoutRecordDelete(), roleAuthority.getFinacialRecordRead(), roleAuthority.getFinacialRecordAdd(), roleAuthority.getFinacialRecordEdit(), roleAuthority.getFinacialRecordDelete(), roleAuthority.getRolename());
 	}
 
+	@Override
+	public long getCountWithRolename(String rolename) {
+		String sql = "SELECT count(Rolename) FROM role_authority WHERE Rolename = ?";
+		return getForValue(sql, rolename);
+	}
+
+	@Override
+	public void delete(String rolename) {
+		String sql = "DELETE FROM role_authority WHERE Rolename = ?";
+		update(sql, rolename);
+	}
+
 }

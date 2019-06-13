@@ -2,26 +2,26 @@ package com.skyoung.mvcapp.domain;
 
 public class RoleAuthority {
 	private String Rolename;
-	private int AuthorityManage;
-	private int StaffRead;
-	private int StaffAdd;
-	private int StaffEdit;
-	private int StaffDelete;
-	private int StaffTypeRead;
-	private int StaffTypeAdd;
-	private int StaffTypeEdit;
-	private int StaffTypeDelete;
-	private int MemberRead;
-	private int MemberAdd;
-	private int MemberEdit;
-	private int MemberDelete;
-	private int WorkoutRecordRead;
-	private int WorkoutRecordAdd;
-	private int WorkoutRecordDelete;
-	private int FinacialRecordRead;
-	private int FinacialRecordAdd;
-	private int FinacialRecordEdit;
-	private int FinacialRecordDelete;
+	private int AuthorityManage = 0;
+	private int StaffRead = 0;
+	private int StaffAdd = 0;
+	private int StaffEdit = 0;
+	private int StaffDelete = 0;
+	private int StaffTypeRead = 0;
+	private int StaffTypeAdd = 0;
+	private int StaffTypeEdit = 0;
+	private int StaffTypeDelete = 0;
+	private int MemberRead = 0;
+	private int MemberAdd = 0;
+	private int MemberEdit = 0;
+	private int MemberDelete = 0;
+	private int WorkoutRecordRead = 0;
+	private int WorkoutRecordAdd = 0;
+	private int WorkoutRecordDelete = 0;
+	private int FinacialRecordRead = 0;
+	private int FinacialRecordAdd = 0;
+	private int FinacialRecordEdit = 0;
+	private int FinacialRecordDelete = 0;
 	public String getRolename() {
 		return Rolename;
 	}

@@ -13,4 +13,8 @@ public interface RoleAuthorityDAO {
 	public void insert(RoleAuthority roleAuthority);
 	
 	public void save(RoleAuthority roleAuthority);
+	
+	public void delete(String rolename);
+	
+	public long getCountWithRolename(String rolename);
 }
