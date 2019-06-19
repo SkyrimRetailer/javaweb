@@ -87,6 +87,15 @@
 	function ChangeImg(){
 		document.getElementById("img").src="<%=request.getContextPath()%>/CheckCodeServlet?"+Math.random();
 	}
+	
+	//实现按回车登录
+	document.onkeydown=function(e){
+	if (!e) e = window.event;//考虑浏览器兼容性
+	        if ((e.keyCode || e.which) == 13) {
+	            login();
+	        }
+	}
+
 	function login(){
 		var label = document.getElementById("label");
 		var notice = document.getElementById("notice");
